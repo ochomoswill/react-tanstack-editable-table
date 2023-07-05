@@ -1,0 +1,78 @@
+/*@font-face {
+  font-family: 'IBMPlexSans-Regular';
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf');
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans-Regular';
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf');
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-SemiBold.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans-Regular';
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Bold.ttf');
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}*/
+
+
+
+@font-face {
+  font-family: 'Goldmann Sans';
+  src: url('assets/fonts/Goldman/goldman-sans-thin.woff2');
+  src: url('assets/fonts/Goldman/goldman-sans-thin.woff2') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Goldmann Sans';
+  src: url('assets/fonts/Goldman/goldman-sans-light.woff2');
+  src: url('assets/fonts/Goldman/goldman-sans-light.woff2') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Goldmann Sans';
+  src: url('assets/fonts/Goldman/goldman-sans-regular.woff2');
+  src: url('assets/fonts/Goldman/goldman-sans-regular.woff2') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Goldmann Sans';
+  src: url('assets/fonts/Goldman/goldman-sans-medium.woff2');
+  src: url('assets/fonts/Goldman/goldman-sans-medium.woff2') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Goldmann Sans';
+  src: url('assets/fonts/Goldman/goldman-sans-bold.woff2');
+  src: url('assets/fonts/Goldman/goldman-sans-bold.woff2') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+
+/*@font-face {
+  font-family: 'IBMPlexSans-Regular';
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf');
+  src: url('assets/fonts/IBMPlexSans/IBMPlexSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}*/
+
+
+

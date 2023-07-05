@@ -1,21 +1,10 @@
 import React, {useEffect, useRef} from 'react'
-
 import {ColumnDef, Table,} from '@tanstack/react-table'
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Person} from "../makeData.ts";
-import {EditableTable} from "../component/EditableTable.tsx";
-
-/*{
-    "bank_id" : 28,
-    "bank_code" : "035",
-    "bank_name" : "African Banking Corporation",
-    "country" : "Kenya",
-    "status" : "Active",
-    "date_created" : "2021-11-01 09:08:39",
-    "date_modified" : "2021-11-01 09:08:39"
-}*/
+import {Person} from "../../../makeData.ts";
+import {EditableTable} from "../EditableTable.tsx";
 
 const RowSchema = z.object({
     bank_id: z.any(),
@@ -36,7 +25,7 @@ const initialFormState: Partial<FormValues> = {};
 
 const getAuthHeader = () => {
     return {
-        Authorization: 'LTFMOjphNGVhMGE4MWJkNDY4MmEyZmNmMWU3YjNhM2QxYWE3ZmRjMmJiYjg5MjYzMzYzMmIyMDhkMTYyOGEyMDA0ZGE5OjpNQUlOX1BPUlRBTA',
+        Authorization: 'LTFMOjpkYjllM2VlYzhhZWFjNjkzNzYyN2ZkOGEyYjg0MDllM2ZkMDg4Nzg4ZTIxMDMyMzdkZmUzNTg5MjQ2Y2M4YTMxOjpNQUlOX1BPUlRBTA',
         RequestReference: 'lokknnjjj'
     }
 }
@@ -173,16 +162,14 @@ export function IndustryTypes() {
                 accessorKey: 'status',
                 footer: props => props.column.id,
                 meta: {
-                    editing:{
-                        type: 'select',
-                        lookup: {
-                            dataSource: [
-                                {item: 'Active'},
-                                {item: 'Inactive'},
-                            ],
-                            displayExpr: 'item',
-                            valueExpr: 'item'
-                        }
+                    dataType: 'select',
+                    lookup: {
+                        dataSource: [
+                            {item: 'Active'},
+                            {item: 'Inactive'},
+                        ],
+                        displayExpr: 'item',
+                        valueExpr: 'item'
                     }
                 }
             },

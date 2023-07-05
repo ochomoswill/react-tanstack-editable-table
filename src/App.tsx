@@ -1,8 +1,7 @@
-import React, {useRef} from 'react'
+import React from 'react'
 import './App.css'
-import {IndustryTypes} from "./examples/IndustryTypes.tsx";
-
-
+import {IndustryTypes} from "./component/EditableTable/examples/IndustryTypes.tsx";
+import {FCBSMantineProvider} from "./lib/mantine/FCBSMantineProvider.tsx";
 
 
 function App() {
@@ -10,7 +9,9 @@ function App() {
 
     return (
         <React.Fragment>
-            <IndustryTypes/>
+            <FCBSMantineProvider>
+                <IndustryTypes/>
+            </FCBSMantineProvider>
         </React.Fragment>
     )
 }

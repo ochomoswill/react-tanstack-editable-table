@@ -13,7 +13,7 @@ import {UseFormReturn} from "react-hook-form";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
-        editing: {
+        editing?: {
             editRowKey: any,
             setEditRowKey: (editRowKey?: string) => void
             getEditRowData: () => any
@@ -22,18 +22,16 @@ declare module '@tanstack/react-table' {
             cancelRowEditing: (cellContext: CellContext<any, any>) => void
             onSave: (e: any) => void
         },
-        formInstance: UseFormReturn<any>
+        formInstance?: UseFormReturn<any>
         rowKey: string
     }
 
     interface ColumnMeta {
-        editing?: {
-            type?: 'text' | 'number' | 'select' | 'radio' | 'checkbox',
-            lookup?: {
-                dataSource: any
-                displayExpr: string
-                valueExpr: string
-            }
+        dataType?: 'text' | 'number' | 'select' | 'radio' | 'checkbox',
+        lookup?: {
+            dataSource: any
+            displayExpr: string
+            valueExpr: string
         }
     }
 }
@@ -50,7 +48,7 @@ const defaultColumn: Partial<ColumnDef<any>> = {
         if (row.original[rowKey] === table.options.meta?.editing?.editRowKey) {
 
 
-            const inputType = column.columnDef.meta?.editing?.type;
+            const inputType = column.columnDef.meta?.dataType;
 
             let registerParameters = undefined;
 
@@ -59,9 +57,9 @@ const defaultColumn: Partial<ColumnDef<any>> = {
 
             switch (inputType) {
                 case 'select':
-                    const dataSource = column.columnDef.meta?.editing?.lookup?.dataSource ?? [];
-                    const valueExpr = column.columnDef.meta?.editing?.lookup?.valueExpr ?? 'value';
-                    const dispExpr = column.columnDef.meta?.editing?.lookup?.displayExpr ?? 'label';
+                    const dataSource = column.columnDef.meta?.lookup?.dataSource ?? [];
+                    const valueExpr = column.columnDef.meta?.lookup?.valueExpr ?? 'value';
+                    const dispExpr = column.columnDef.meta?.lookup?.displayExpr ?? 'label';
 
                     component = (
                         <React.Fragment>
@@ -122,11 +120,11 @@ export interface EditableProps {
     dataSource: any[]
     formInstance: UseFormReturn<any>
     rowKey: string
-    onEditingStart?: () => void
+    enableAdd?: boolean
+    enableEdit?: boolean
     initAddRow?: () => void
     insertRow?: () => void
     updateRow?: () => void
-    // removeRow?: () => void
     cancelRowEditing?: () => void
     tableRef?: MutableRefObject<Table<unknown> | null>
 }
@@ -249,11 +247,14 @@ export const EditableTable = (props: EditableProps) => {
 
     return (
         <div className="p-2">
-            <button
-                onClick={props?.initAddRow ?? initAddRow}
-            >
-                add new
-            </button>
+            {
+                props?.enableAdd &&
+                <button
+                    onClick={props?.initAddRow ?? initAddRow}
+                >
+                    add new
+                </button>
+            }
 
             <div className="h-2"/>
             <form

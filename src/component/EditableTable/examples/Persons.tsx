@@ -3,8 +3,8 @@ import {ColumnDef, Table,} from '@tanstack/react-table'
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {makeData, Person} from "../makeData.ts";
-import {EditableTable} from "../component/EditableTable.tsx";
+import {makeData, Person} from "../../../makeData.ts";
+import {EditableTable} from "../EditableTable.tsx";
 
 const PersonSchema = z.object({
     personId: z.any(),
@@ -90,9 +90,7 @@ export function Persons() {
                 header: () => 'Age',
                 footer: props => props.column.id,
                 meta: {
-                    editing: {
-                        type: 'number'
-                    }
+                    dataType: 'number'
                 }
             },
             {
@@ -101,9 +99,7 @@ export function Persons() {
                 header: () => <span>Visits</span>,
                 footer: props => props.column.id,
                 meta: {
-                    editing: {
-                        type: 'number'
-                    }
+                    dataType: 'number'
                 }
             },
             {
@@ -112,17 +108,15 @@ export function Persons() {
                 header: 'Status',
                 footer: props => props.column.id,
                 meta: {
-                    editing: {
-                        type: 'select',
-                        lookup: {
-                            dataSource: [
-                                {item: 'single', itemLabel: 'Single'},
-                                {item: 'relationship', itemLabel: 'Relationship'},
-                                {item: 'complicated', itemLabel: 'Complicated'},
-                            ],
-                            valueExpr: 'item',
-                            displayExpr: 'itemLabel'
-                        }
+                    dataType: 'select',
+                    lookup: {
+                        dataSource: [
+                            {item: 'single', itemLabel: 'Single'},
+                            {item: 'relationship', itemLabel: 'Relationship'},
+                            {item: 'complicated', itemLabel: 'Complicated'},
+                        ],
+                        valueExpr: 'item',
+                        displayExpr: 'itemLabel'
                     }
                 }
             },
@@ -132,9 +126,7 @@ export function Persons() {
                 header: 'Profile Progress',
                 footer: props => props.column.id,
                 meta: {
-                    editing: {
-                        type: 'number'
-                    }
+                    dataType: 'number'
                 }
             },
             {
@@ -204,6 +196,7 @@ export function Persons() {
             formInstance={formInstance}
             insertRow={handleSubmit(insertRow)}
             updateRow={handleSubmit(updateRow)}
+            enableAdd={true}
             tableRef={reactTableRef}
         />
     )
