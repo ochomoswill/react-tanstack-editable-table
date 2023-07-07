@@ -22,7 +22,7 @@ import {InfoCircle, Report, X} from "tabler-icons-react";
 import {z} from "zod";
 import {SubmitErrorHandler, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {RHFTextBox} from "../../../../lib/devextreme/controls/text-box";
+import {RHFTextBox} from "../../../../devextreme/controls/text-box";
 import FCBSMantineTanstackTableActionBarColumnsSelect
     , {
     FCBSMantineTanstackTableActionBarColumnsSelectColumn, getSelectableColumns

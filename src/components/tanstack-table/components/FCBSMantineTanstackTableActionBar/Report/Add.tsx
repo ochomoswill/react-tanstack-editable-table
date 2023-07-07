@@ -23,10 +23,10 @@ import {InfoCircle, Report, X} from "tabler-icons-react";
 import {z} from "zod";
 import {SubmitErrorHandler, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {RHFTextBox} from "../../../../lib/devextreme/controls/text-box";
-import {RHFSelectBox} from "../../../../lib/devextreme/controls/select-box";
-import {RHFTextArea} from "../../../../lib/devextreme/controls/text-area";
-import {RHFCheckBox} from "../../../../lib/devextreme/controls/check-box";
+import {RHFTextBox} from "../../../../devextreme/controls/text-box";
+import {RHFSelectBox} from "../../../../devextreme/controls/select-box";
+import {RHFTextArea} from "../../../../devextreme/controls/text-area";
+import {RHFCheckBox} from "../../../../devextreme/controls/check-box";
 import FCBSMantineTanstackTableActionBarColumnsSelect
     , {
     FCBSMantineTanstackTableActionBarColumnsSelectColumn, getSelectableColumns

@@ -19,7 +19,7 @@ export default defineConfig({
             entry: resolve('src', 'components/index.ts'),
             name: 'ThemelioCore',
             formats: ['es', 'umd'],
-            fileName: (format) => `themelio-core.${format}.js`,
+            fileName: (format) => `react-tanstack-editable-table.${format}.js`,
         },
         rollupOptions: {
             external: [...Object.keys(packageJson.peerDependencies)],

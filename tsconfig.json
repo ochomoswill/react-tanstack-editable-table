@@ -23,7 +23,7 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "themelio-core": [
+      "react-tanstack-editable-table": [
         "src/components/index.ts"
       ]
     },

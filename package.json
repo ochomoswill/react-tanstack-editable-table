@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf ke-skyworld-themelio-core-*.*.*.tgz",
+    "clean": "rm -rf ./dist && rm -rf ke-skyworld-react-tanstack-editable-table-*.*.*.tgz",
     "dev": "vite",
     "build": "pnpm run clean && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "prepack": "pnpm run build"
   },
   "dependencies": {
@@ -21,13 +19,6 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.25",
-    "@storybook/addon-interactions": "^7.0.25",
-    "@storybook/addon-links": "^7.0.25",
-    "@storybook/blocks": "^7.0.25",
-    "@storybook/react": "^7.0.25",
-    "@storybook/react-vite": "^7.0.25",
-    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/node": "^20.4.0",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
@@ -37,9 +28,7 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
-    "eslint-plugin-storybook": "^0.6.12",
     "prop-types": "^15.8.1",
-    "storybook": "^7.0.25",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
     "vite-plugin-dts": "^3.1.0",
@@ -82,13 +71,13 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/themelio-core.es.js",
-      "require": "./dist/themelio-core.umd.js"
+      "import": "./dist/react-tanstack-editable-table.es.js",
+      "require": "./dist/react-tanstack-editable-table.umd.js"
     },
     "./dist/style.css": "./dist/style.css"
   },
-  "main": "./dist/themelio-core.umd.js",
-  "module": "./dist/themelio-core.es.js",
+  "main": "./dist/react-tanstack-editable-table.umd.js",
+  "module": "./dist/react-tanstack-editable-table.es.js",
   "types": "./dist/components/index.d.ts",
   "license": "ISC",
   "repository": {
