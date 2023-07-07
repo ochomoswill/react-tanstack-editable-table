@@ -2,7 +2,7 @@ import React, {FunctionComponent, MutableRefObject, useCallback, useMemo, useRef
 
 /*import SampleOrganizations from "@/lib/mantine/tanstack-table/sample/test-data.json"*/
 import {createColumnHelper, PaginationState, Row, SortingState, Table} from "@tanstack/react-table"
-import {ActionIcon, Badge, Button, Group, Stack, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Badge, Button, Group, useMantineTheme} from "@mantine/core";
 import {IconBolt, IconEdit, IconEye, IconPower, IconTrash} from "@tabler/icons-react";
 import {FCBSMantineTanstackTable} from "../index.tsx";
 
@@ -213,7 +213,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
             height: '100%'
         }}>*/
             <FCBSMantineTanstackTable
-                parentId={'organizationId'}
+                rowKey={'guid'}
                 dataSource={paginatedData}
                 columns={columns}
                 initialPaginationState={paginationState}
@@ -247,14 +247,11 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                     simulateLoading()
                     console.log(sortingState)
                 }}
-
                 tableRef={tableRef}
-
                 isLoading={loading}
                 loaderProps={{
                     overlayBlur: 2
                 }}
-
                 initialColumnPinningState={{
                     left: ['guid'],
                     right: ['actions']

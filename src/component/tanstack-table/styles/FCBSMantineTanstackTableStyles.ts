@@ -33,6 +33,15 @@ export const FCBSMantineTanstackTableStyles = createStyles((theme, params, varia
 
             borderBottom: 'none',
             borderRight: 'none',
+        },
+        tr: {
+            backgroundColor: theme.white,
+            "&:hover": {
+                backgroundColor: theme.colors.primary[0]
+            },
+            "&:focus": {
+                backgroundColor: theme.colors.primary[0]
+            }
         }
     }
 })

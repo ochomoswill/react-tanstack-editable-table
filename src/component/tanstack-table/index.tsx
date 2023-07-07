@@ -25,13 +25,14 @@ import FCBSMantineTanstackTableActionBar
     FCBSMantineTanstackTableActionBarConfig
 } from "./components/FCBSMantineTanstackTableActionBar";
 import {UseFormReturn} from "react-hook-form";
-import {defaultColumn} from "@/component/tanstack-table/FCBSMantineTanstackTableEditing.tsx";
+import {defaultDevExtremeColumn} from "@/component/tanstack-table/FCBSMantineTanstackTableEditing.tsx";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         editing?: {
             editRowKey: any,
             setEditRowKey: (editRowKey?: string) => void
+            isCurrentEditRow: (row: Row<any>) => boolean
             getEditRowData: () => any
             initAddRow: () => void
             initEditRow: (cellContext: CellContext<any, any>) => void
@@ -54,7 +55,7 @@ declare module '@tanstack/react-table' {
 }
 
 export interface FCBSMantineTanstackTableProps {
-    parentId: string
+    // parentId: string
     rowKey: string
     dataSource: Array<unknown>
     columns: Array<ColumnDef<any, any>>
@@ -81,7 +82,7 @@ export interface FCBSMantineTanstackTableProps {
     initialColumnPinningState?: ColumnPinningState
 
     actionBarConfig?: FCBSMantineTanstackTableActionBarConfig
-    editing: {
+    editing?: {
         formInstance: UseFormReturn<any>
         enableAdd?: boolean
         enableEdit?: boolean
@@ -90,11 +91,22 @@ export interface FCBSMantineTanstackTableProps {
         updateRow?: () => void
         cancelRowEditing?: () => void
     }
+    persistState?: {
+        enabled: boolean
+        type: 'localStorage' | 'sessionStorage'
+        storageKey: string
+    }
+}
+
+const EDIT_COLUMN_KEY = "__EDITING_COLUMN_KEY__";
+
+const buildPersistStateStorageKey = (storageKey: string) => {
+    return `${FCBSMantineTanstackTable.name}.${storageKey}.state`
 }
 
 export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) => {
 
-    const {parentId, rowKey, dataSource, columns, totalCount, onPaginationChange} = props;
+    const {rowKey, dataSource, columns, totalCount, onPaginationChange} = props;
     const isInitialRender = useRef<{
         pagination: boolean
         sorting: boolean
@@ -104,10 +116,10 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
         sorting: true,
         columns: true
     })
-    const LOCAL_STORAGE_KEY: string = `${FCBSMantineTanstackTable.name}.${parentId}.state`
+
     let initialTableState: InitialTableState = {}
-    if (parentId) {
-        const LOCAL_STORAGE_VALUE = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (props?.persistState && props?.persistState?.enabled) {
+        const LOCAL_STORAGE_VALUE = localStorage.getItem(buildPersistStateStorageKey(props?.persistState?.storageKey))
         initialTableState = LOCAL_STORAGE_VALUE ? JSON.parse(LOCAL_STORAGE_VALUE) : {}
     }
 
@@ -115,9 +127,31 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
 
     const [data, setData] = React.useState(dataSource)
 
-    React.useEffect(() => {
-        setData(dataSource)
-    }, [dataSource])
+    /*React.useEffect(() => {
+        const newDataSource: any[] = []
+        if(Array.isArray(dataSource) && dataSource.length > 1){
+            dataSource.forEach((item: any) => {
+                newDataSource.push({
+                    [EDIT_COLUMN_KEY]: item[rowKey],
+                    ...item
+                })
+            })
+        }
+        setData(newDataSource)
+    }, [dataSource])*/
+
+    const buildDataSource = (originalDataSource: any[]) => {
+        const newDataSource: any[] = []
+        if(Array.isArray(originalDataSource) && originalDataSource.length > 1){
+            originalDataSource.forEach((item: any) => {
+                newDataSource.push({
+                    [EDIT_COLUMN_KEY]: item[rowKey],
+                    ...item
+                })
+            })
+        }
+        return newDataSource;
+    }
 
     const [{pageIndex, pageSize}, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
@@ -204,7 +238,6 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
 
 
     const onSave = (e) => {
-        console.log('@onSave ', tableMode);
         e.preventDefault();
         switch (tableMode) {
             case 'add':
@@ -221,14 +254,14 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
 
         setData([
             {
-                [rowKey]: 'add-new',
+                [EDIT_COLUMN_KEY]: 'add-new',
             },
             ...dataSource
         ])
 
         if (table.options.meta?.formInstance) {
             table.options.meta.formInstance.reset({
-                [rowKey]: 'add-new',
+                [EDIT_COLUMN_KEY]: 'add-new',
             },)
         }
 
@@ -244,7 +277,7 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
         }
     }
     const cancelRowEditing = (cellContext: CellContext<any, any>) => {
-        if(cellContext.row.original[rowKey] === 'add-new') {
+        if(cellContext.row.original[EDIT_COLUMN_KEY] === 'add-new') {
             const oldData = [...cellContext.table.options.data];
 
             if(cellContext.row.index > -1) {
@@ -258,19 +291,25 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
     const getEditRowData = () => {
         const oldData = [...table.options.data];
 
-        const foundRecord = oldData.find((item) => item[rowKey] === editRowKey)
+        const foundRecord = oldData.find((item) => item[EDIT_COLUMN_KEY] === editRowKey)
 
         return foundRecord
     }
 
+
+    const isCurrentEditRow = (row: Row<any>) => {
+        return table.options?.meta?.editing?.editRowKey && (row.original[EDIT_COLUMN_KEY] === table.options?.meta?.editing?.editRowKey)
+    }
+
     const table = useReactTable({
-        data,
+        data: buildDataSource(data),
         columns: finalColumns as ColumnDef<unknown, any>[],
-        defaultColumn,
+        defaultColumn: defaultDevExtremeColumn,
         meta: {
             editing: {
                 editRowKey,
                 setEditRowKey,
+                isCurrentEditRow,
                 getEditRowData,
                 initAddRow,
                 initEditRow,
@@ -313,14 +352,15 @@ export const FCBSMantineTanstackTable = (props: FCBSMantineTanstackTableProps) =
 
         onColumnVisibilityChange: setColumnVisibility
     })
+
     if (props.tableRef && (props.tableRef.current === null)) {
         props.tableRef.current = table
         console.log(`props.tableRef.current is set!`)
     }
 
     useEffect(() => {
-        if (parentId) {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(table.getState()))
+        if (!!props?.persistState?.storageKey) {
+            localStorage.setItem(buildPersistStateStorageKey(props?.persistState?.storageKey), JSON.stringify(table.getState()))
         }
     }, [table.getState()]);
 

@@ -24,3 +24,9 @@
         opacity: 1;
     }
 }
+
+
+/*
+tr:hover{
+    background: var(--mantine-color-secondary-0) !important;
+}*/

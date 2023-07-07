@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import {UseFormReturn} from "react-hook-form";
 
-declare module '@tanstack/react-table' {
+/*declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         editing?: {
             editRowKey: any,
@@ -34,7 +34,7 @@ declare module '@tanstack/react-table' {
             valueExpr: string
         }
     }
-}
+}*/
 
 // Give our default column cell renderer editing superpowers!
 const defaultColumn: Partial<ColumnDef<any>> = {

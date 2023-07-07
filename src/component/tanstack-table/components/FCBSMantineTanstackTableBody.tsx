@@ -151,7 +151,10 @@ const FCBSMantineTanstackTableBody: FunctionComponent<Props> = (props) => {
             </thead>
             <tbody>
             {table.getRowModel().rows.map(row => (
-                <tr key={row.id}>
+                <tr
+                    key={row.id}
+                    className={classes.tr}
+                >
                     {[
                         ...row.getLeftVisibleCells(),
                         ...row.getCenterVisibleCells(),
@@ -159,21 +162,30 @@ const FCBSMantineTanstackTableBody: FunctionComponent<Props> = (props) => {
                     ].map(cell => (
                         <td key={cell.id}
                             className={classes.td}
+                            // data-selected-row={row.getIsSelected() ? 'YES': 'NO'}
                             style={{
                                 width: cell.column.getSize(),
                                 ...(cell.column.getIsPinned() === "left" ? {
                                     position: "sticky",
                                     left: leftPinnedColumnsOffsets[cell.column.id],
-                                    background: theme.white,
+                                    background: 'inherit',
                                     zIndex: 1,
                                     borderRight: `solid 1px ${theme.colors.gray[3]}`,
                                 } : {}),
                                 ...(cell.column.getIsPinned() === "right" ? {
                                     position: "sticky",
                                     right: rightPinnedColumnsOffsets[cell.column.id],
-                                    background: theme.white,
+                                    background: 'inherit',
                                     zIndex: 1
+                                } : {}),
+                                ...(table.options?.meta?.editing?.isCurrentEditRow(row) ? {
+                                    overflow: 'visible',
+                                    background: theme.colors.grape[0],
+                                } : {}),
+                                ...(row.getIsSelected() ? {
+                                    background: theme.colors.primary[0],
                                 } : {})
+
                             }}
                         >
                             {flexRender(

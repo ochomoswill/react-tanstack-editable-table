@@ -1,0 +1,11 @@
+Editable Accessible
+---
+
+[*] 1. Standalone key for Editing i.e __EDITING_KEY__
+[*] 2. Add function to check if row is in Edit Mode
+[*] 3. Add Hover on Rows
+4. Support:
+    - Custom Cell Definition
+    - Editable Cell
+    - Custom Editable Cell Render
+

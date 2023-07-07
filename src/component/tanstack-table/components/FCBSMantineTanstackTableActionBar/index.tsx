@@ -59,7 +59,7 @@ const FCBSMantineTanstackTableActionBar: FunctionComponent<Props> = (props) => {
         actionBarConfig ?
             <Group position={'apart'}>
                 <Group spacing={0}>
-                    {props.editing.enableAdd &&
+                    {props.editing?.enableAdd &&
                         <Button
                             variant={'subtle'}
                             leftIcon={<IconPlus size={theme.fontSizes.md}

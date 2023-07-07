@@ -3,7 +3,7 @@ import React, {FunctionComponent, MutableRefObject, useCallback, useMemo, useRef
 /*import SampleOrganizations from "@/lib/mantine/tanstack-table/sample/test-data.json"*/
 import {createColumnHelper, PaginationState, Row, SortingState, Table} from "@tanstack/react-table"
 import {ActionIcon, Badge, Button, Group, useMantineTheme} from "@mantine/core";
-import {IconCircleX, IconDeviceFloppy, IconEdit, IconEye, IconTrash} from "@tabler/icons-react";
+import {IconDeviceFloppy, IconEdit, IconEye, IconTrash, IconX} from "@tabler/icons-react";
 import {FCBSMantineTanstackTable} from "../index.tsx";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
@@ -90,7 +90,8 @@ type Props = OwnProps;
 const RowSchema = z.object({
     guid: z.any(),
     company: z.string().trim().min(1, 'Company Required'),
-    email: z.string().trim().min(1, 'Email Required')
+    email: z.string().trim().min(1, 'Email Required'),
+    isActive: z.any()
 });
 
 type FormValues = z.infer<typeof RowSchema>;
@@ -109,7 +110,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
 
     const insertRow = async (formData: any) => {
         try {
-            alert('@insertRow '+ JSON.stringify(formData));
+            alert('@insertRow ' + JSON.stringify(formData));
         } catch (e) {
             console.error('@insertRow ', e);
         }
@@ -117,7 +118,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
 
     const updateRow = async (formData: any) => {
         try {
-            alert('@updateRow '+ JSON.stringify(formData));
+            alert('@updateRow ' + JSON.stringify(formData));
         } catch (e) {
             console.error('@updateRow ', e);
         }
@@ -181,9 +182,27 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                 header: 'Status',
                 cell: (props) => {
                     const {getValue} = props;
+
+                    /*if(props.column.columnDef.meta?.enableEditing){
+                        return undefined
+                    }*/
+
+
                     return getValue() ?
                         <Badge color="teal" size="md" radius="xs">ACTIVE</Badge> :
                         <Badge color="red" size="md" radius="xs">INACTIVE</Badge>
+                },
+                meta:{
+                    enableEditing: true,
+                    dataType: 'select',
+                    lookup: {
+                        dataSource: [
+                            {label: 'Active', value: 'ACTIVE'},
+                            {label: 'Inactive', value: 'INACTIVE'},
+                        ],
+                        valueExpr: 'value',
+                        displayExpr: 'label'
+                    }
                 }
             }),
             columnHelper.accessor('latitude', {
@@ -201,7 +220,8 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                 cell: (props) => {
                     const {table, getValue, renderValue, cell, column, row} = props
 
-                    const isEditMode = table.options?.meta?.editing?.editRowKey && row.original[TABLE_ROW_KEY] === table.options?.meta?.editing?.editRowKey;
+                    // const isEditMode = table.options?.meta?.editing?.editRowKey && row.original[TABLE_ROW_KEY] === table.options?.meta?.editing?.editRowKey;
+                    const isEditMode = table.options?.meta?.editing?.isCurrentEditRow(row);
 
                     let editActions = null;
 
@@ -211,16 +231,25 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
 
                                 {
                                     !isEditMode && (
-                                        <ActionIcon color="grape"
-                                                    radius={"md"}
-                                                    variant="light"
-                                                    title={'Edit'}
-                                                    type={'button'}
-                                                    disabled={isEditMode}
-                                                    onClick={() => table.options?.meta?.editing.initEditRow(props)}
-                                        >
-                                            <IconEdit size={theme.fontSizes.sm}/>
-                                        </ActionIcon>
+                                        <React.Fragment>
+                                            <ActionIcon color="grape"
+                                                        radius={"md"}
+                                                        variant="light"
+                                                        title={'Edit'}
+                                                        type={'button'}
+                                                        disabled={isEditMode}
+                                                        onClick={() => table.options?.meta?.editing.initEditRow(props)}
+                                            >
+                                                <IconEdit size={theme.fontSizes.sm}/>
+                                            </ActionIcon>
+                                            <ActionIcon color="teal"
+                                                        radius={"md"}
+                                                        variant="light"
+                                                        title={'View record'}
+                                            >
+                                                <IconEye size={theme.fontSizes.sm}/>
+                                            </ActionIcon>
+                                        </React.Fragment>
                                     )
                                 }
 
@@ -243,7 +272,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                                                         type={'button'}
                                                         onClick={() => table.options?.meta?.editing.cancelRowEditing(props)}
                                             >
-                                                <IconCircleX size={theme.fontSizes.sm}/>
+                                                <IconX size={theme.fontSizes.sm}/>
                                             </ActionIcon>
                                         </React.Fragment>
                                     )
@@ -257,13 +286,9 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
 
                     return (
                         <Group spacing={'xs'}>
-                            <ActionIcon color="teal"
-                                        radius={"md"}
-                                        variant="light"
-                                        title={'View record'}
-                            >
-                                <IconEye size={theme.fontSizes.sm}/>
-                            </ActionIcon>
+                            {editActions}
+
+
                             {/*<ActionIcon color="grape"
                                         radius={"md"}
                                         variant="light"
@@ -272,7 +297,6 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                                 <IconEdit size={theme.fontSizes.sm}/>
                             </ActionIcon>*/}
 
-                            {editActions}
 
                             {/*{row.original.isActive &&
                                 <ActionIcon color="red"
@@ -308,14 +332,11 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
         ]
     }, [theme])
 
-    console.log('@columns ', columns);
-
     return (
         /*<Stack style={{
             height: '100%'
         }}>*/
         <FCBSMantineTanstackTable
-            parentId={'organizationId'}
             rowKey={TABLE_ROW_KEY}
             dataSource={paginatedData}
             columns={columns}
@@ -331,9 +352,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                 setPaginationState(paginationState)
             }}
             totalCount={data.length}
-
             columnResizeMode={"onChange"}
-
             rowsSelectable={true}
             rowSelectableFn={(row: Row<Organization>) => row.original.isActive}
             rowSelectionActionRender={(rowSelection) => (
@@ -356,9 +375,7 @@ const OrganizationsListPage: FunctionComponent<Props> = (props) => {
                 simulateLoading()
                 console.log(sortingState)
             }}
-
             tableRef={tableRef}
-
             isLoading={loading}
             loaderProps={{
                 overlayBlur: 2
