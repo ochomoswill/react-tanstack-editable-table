@@ -2,6 +2,7 @@ import React, {
     forwardRef,
     ForwardRefExoticComponent,
     FunctionComponent, RefAttributes,
+    useEffect,
     useMemo,
     useRef,
     useState
@@ -18,14 +19,11 @@ import {
     Tooltip,
     useMantineTheme
 } from "@mantine/core";
-import {InfoCircle, Report, X} from "tabler-icons-react";
+import {InfoCircle, X} from "tabler-icons-react";
 import {z} from "zod";
 import {SubmitErrorHandler, SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {RHFTextBox} from "@/lib/devextreme/controls/text-box";
-import {RHFSelectBox} from "@/lib/devextreme/controls/select-box";
-import {RHFTextArea} from "@/lib/devextreme/controls/text-area";
-import {RHFCheckBox} from "@/lib/devextreme/controls/check-box";
+import {RHFTextBox} from "../../../../lib/devextreme/controls/text-box";
 import FCBSMantineTanstackTableActionBarColumnsSelect
     , {
     FCBSMantineTanstackTableActionBarColumnsSelectColumn, getSelectableColumns
@@ -39,14 +37,16 @@ import FCBSMantineTanstackTableAdvancedFilter
     from "./../../FCBSMantineTanstackTableAdvancedFilter";
 import {Field} from "devextreme/ui/filter_builder";
 import {FilterBuilderValue, filterBuilderValueToGenericSQLFilter} from "./../../../utils";
+import {IconEye} from "@tabler/icons-react";
+import {useFCBSMantineTanstackTableFilterStoreValue} from "./../../../stores/filter";
 
 const Schema = z.object({
-    report_name: z.string().trim().min(1),
-    report_type: z.enum(['PDF', 'XLSX']),
-    report_description: z.string(),
-    save_as_template: z.boolean()
+    view_name: z.string().trim().min(1)
 })
 type FormValues = z.infer<typeof Schema>;
+const initialFormState: Partial<FormValues> = {
+    view_name: ''
+};
 const useFCBSFormContainerStyles = createStyles((theme) => ({
     [`form-container`]: {
         padding: theme.spacing.xs,
@@ -97,25 +97,14 @@ const useFCBSFormContainerStyles = createStyles((theme) => ({
     }
 }))
 
-type UpdateReportTemplate = FormValues & {
-    id: string | number
-    filter: {
-        value: FilterBuilderValue,
-        sqlLike: string
-    }
-    columns: Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn>
-    sorting: Array<FCBSMantineTanstackTableActionBarSortingSelectColumn>
-}
-
-interface UpdateFormProps {
-    initialValues: FormValues
+interface AddFormProps {
     onSubmit: (values: FormValues) => void
 }
 
-const FCBSMantineTanstackTableActionBarReportUpdateForm: ForwardRefExoticComponent<UpdateFormProps & RefAttributes<HTMLFormElement>> = forwardRef<HTMLFormElement, UpdateFormProps>((props, ref) => {
+const FCBSMantineTanstackTableActionBarViewsAddForm: ForwardRefExoticComponent<AddFormProps & RefAttributes<HTMLFormElement>> = forwardRef<HTMLFormElement, AddFormProps>((props, ref) => {
     const {classes} = useFCBSFormContainerStyles()
     const {control, handleSubmit, reset, watch} = useForm<FormValues>({
-        defaultValues: props.initialValues,
+        defaultValues: {...initialFormState},
         resolver: zodResolver(Schema)
     });
 
@@ -139,10 +128,10 @@ const FCBSMantineTanstackTableActionBarReportUpdateForm: ForwardRefExoticCompone
                 <div className={classes["form-control"]}>
                     <div className={`${classes["form-label"]}`}>
                         <label className={`${classes["form-label__required"]}`}
-                               htmlFor={"report_name"}>
-                            Report Name
+                               htmlFor={"view_name"}>
+                            View Name
                         </label>
-                        <Tooltip label={`Report name`}
+                        <Tooltip label={`View name`}
                                  position={'top-start'}
                                  withArrow={true}
                         >
@@ -151,122 +140,63 @@ const FCBSMantineTanstackTableActionBarReportUpdateForm: ForwardRefExoticCompone
                             </ActionIcon>
                         </Tooltip>
                     </div>
-                    <RHFTextBox name={'report_name'}
+                    <RHFTextBox name={'view_name'}
                                 control={control}
                                 stylingMode={'outlined'}
                                 className={classes["form-input"]}/>
-                </div>
-                <div className={classes["form-control"]}>
-                    <div className={`${classes["form-label"]}`}>
-                        <label className={`${classes["form-label__required"]}`}
-                               htmlFor={"identification_type"}>
-                            Report Type
-                        </label>
-                        <Tooltip label={`File Type of report`}
-                                 position={'top-start'}
-                                 withArrow={true}
-                        >
-                            <ActionIcon size={'xs'} ml={'xs'}>
-                                <InfoCircle/>
-                            </ActionIcon>
-                        </Tooltip>
-                    </div>
-                    <RHFSelectBox name={'report_type'}
-                                  control={control}
-                                  stylingMode={'outlined'}
-                                  labelMode={'static'}
-                                  dataSource={[
-                                      {label: 'Microsoft Excel Document (XLSX)', value: 'XLSX'},
-                                      {label: 'PDF Document (PDF)', value: 'PDF'},
-                                  ]}
-                                  className={classes["form-input"]}
-                                  displayExpr={'label'}
-                                  valueExpr={'value'}
-                    />
-                </div>
-                <div className={classes["form-control"]}>
-                    <div className={`${classes["form-label"]}`}>
-                        <label htmlFor={"report_description"}>
-                            Report Description
-                        </label>
-                        <Tooltip label={`Report Description`}
-                                 position={'top-start'}
-                                 withArrow={true}
-                        >
-                            <ActionIcon size={'xs'} ml={'xs'}>
-                                <InfoCircle/>
-                            </ActionIcon>
-                        </Tooltip>
-                    </div>
-                    <RHFTextArea name={'report_description'}
-                                 control={control}
-                                 stylingMode={'outlined'}
-                                 className={classes["form-input"]}
-                                 height={50}
-                    />
-                </div>
-                <div className={classes["form-control"]}>
-                    <div className={`${classes["form-label"]}`}>
-                        <label htmlFor={"save_as_template"}>
-                            Save As Template
-                        </label>
-                        <Tooltip label={`Save this report as a template`}
-                                 position={'top-start'}
-                                 withArrow={true}
-                        >
-                            <ActionIcon size={'xs'} ml={'xs'}>
-                                <InfoCircle/>
-                            </ActionIcon>
-                        </Tooltip>
-                    </div>
-                    <RHFCheckBox name={'save_as_template'}
-                                 control={control}
-                                 stylingMode={'outlined'}
-                                 className={classes["form-input"]}
-                    />
                 </div>
             </div>
         </form>
     )
 })
 
-export interface FCBSMantineTanstackTableActionBarReportUpdateProps {
+export interface FCBSMantineTanstackTableActionBarViewsAddProps {
     table: Table<unknown>
 
     isLoading: boolean
     fields: Array<Field>
-    template: UpdateReportTemplate
 
     onClose: () => void
 
-    onUpdateReport: (values: UpdateReportTemplate) => void
+    onCreateView: (values: FormValues & {
+        filter: {
+            value: FilterBuilderValue,
+            sqlLike: string
+        }
+        columns: Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn>
+        sorting: Array<FCBSMantineTanstackTableActionBarSortingSelectColumn>
+    }) => void
 }
 
-const FCBSMantineTanstackTableActionBarReportUpdate: FunctionComponent<FCBSMantineTanstackTableActionBarReportUpdateProps> = (props) => {
-    const {table, isLoading, onUpdateReport, fields, onClose, template} = props
+const FCBSMantineTanstackTableActionBarViewsAdd: FunctionComponent<FCBSMantineTanstackTableActionBarViewsAddProps> = (props) => {
+    const {table, isLoading, onCreateView,fields,onClose} = props
 
     const theme = useMantineTheme()
 
-    const [filterBuilderValue, setFilterBuilderValue] = useState<FilterBuilderValue>(template.filter.value)
+    // Zustand
+    const storeFilterValue = useFCBSMantineTanstackTableFilterStoreValue();
+
+    const [filterBuilderValue, setFilterBuilderValue] = useState<FilterBuilderValue>(storeFilterValue.filterBuilder)
     const strFilterBuilderValue = useMemo(() => filterBuilderValueToGenericSQLFilter(filterBuilderValue, fields), [filterBuilderValue, fields])
 
-    /*const columnSelectColumns: Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn> = useMemo(() => {
+    const columnSelectColumns: Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn> = useMemo(() => {
         return getSelectableColumns(table)
-    }, [table.getAllLeafColumns(), table.getVisibleLeafColumns(), table.getState().columnPinning])*/
-    const [changeColumnSelectColumns, setChangeColumnSelectColumns] = useState<Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn>>(template.columns)
+    }, [table.getAllLeafColumns(), table.getVisibleLeafColumns(), table.getState().columnPinning])
+    const [changeColumnSelectColumns, setChangeColumnSelectColumns] = useState<Array<FCBSMantineTanstackTableActionBarColumnsSelectColumn>>(columnSelectColumns)
 
-    /*const columnSortingColumns: Array<FCBSMantineTanstackTableActionBarSortingSelectColumn> = useMemo(() => {
+    const columnSortingColumns: Array<FCBSMantineTanstackTableActionBarSortingSelectColumn> = useMemo(() => {
         return getSortingColumns(table)
-    }, [table.getState().sorting])*/
-    const [changeColumnSortingColumns, setChangeColumnSortingColumns] = useState<Array<FCBSMantineTanstackTableActionBarSortingSelectColumn>>(template.sorting);
+    }, [table.getState().sorting])
 
-    /*useEffect(() => {
+    const [changeColumnSortingColumns, setChangeColumnSortingColumns] = useState<Array<FCBSMantineTanstackTableActionBarSortingSelectColumn>>(columnSortingColumns);
+
+    useEffect(() => {
         setChangeColumnSelectColumns(columnSelectColumns)
     }, [columnSelectColumns]);
 
     useEffect(() => {
         setChangeColumnSortingColumns(columnSortingColumns)
-    }, [columnSortingColumns]);*/
+    }, [columnSortingColumns]);
 
     const formRef = useRef<HTMLFormElement>(null)
 
@@ -278,8 +208,8 @@ const FCBSMantineTanstackTableActionBarReportUpdate: FunctionComponent<FCBSManti
                             overlayBlur={1}/>
             <Group position={"apart"}>
                 <Group spacing={4}>
-                    <Report size={theme.fontSizes.sm} color={'green'}/>
-                    <Text color={'primary'}>Update Report</Text>
+                    <IconEye size={theme.fontSizes.sm} color={'green'}/>
+                    <Text color={'primary'}>New View</Text>
                 </Group>
                 <ActionIcon onClick={() => {
                     onClose()
@@ -297,21 +227,14 @@ const FCBSMantineTanstackTableActionBarReportUpdate: FunctionComponent<FCBSManti
                  p={0}
                  m={0}>
 
-                <FCBSMantineTanstackTableActionBarReportUpdateForm
+                <FCBSMantineTanstackTableActionBarViewsAddForm
                     ref={formRef}
-                    initialValues={{
-                        report_name: template.report_name,
-                        report_type: template.report_type,
-                        report_description: template.report_description,
-                        save_as_template: template.save_as_template
-                    }}
                     onSubmit={(values) => {
                         /*console.log(`Form : `, values)
                         console.log(`Filter : `, filterBuilderValue, strFilterBuilderValue)
                         console.log(`Columns : `, changeColumnSelectColumns)
                         console.log(`Sort : `, changeColumnSortingColumns)*/
-                        onUpdateReport({
-                            id: template.id,
+                        onCreateView({
                             ...values,
                             filter: {
                                 value: filterBuilderValue,
@@ -377,19 +300,19 @@ const FCBSMantineTanstackTableActionBarReportUpdate: FunctionComponent<FCBSManti
                         onClick={() => {
                             if (formRef.current) formRef.current.reset()
 
-                            setChangeColumnSelectColumns(template.columns)
-                            setChangeColumnSortingColumns(template.sorting)
-                            setFilterBuilderValue([])
+                            setChangeColumnSelectColumns(columnSelectColumns)
+                            setChangeColumnSortingColumns(columnSortingColumns)
+                            setFilterBuilderValue(storeFilterValue.filterBuilder)
                         }}
                 >Cancel</Button>
                 <Button size={'xs'}
                         onClick={() => {
                             if (formRef.current) formRef.current.requestSubmit()
                         }}
-                >Update Report</Button>
+                >Create View</Button>
             </Group>
         </Box>
     );
 };
 
-export default FCBSMantineTanstackTableActionBarReportUpdate;
+export default FCBSMantineTanstackTableActionBarViewsAdd;

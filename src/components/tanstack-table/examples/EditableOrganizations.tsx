@@ -4,7 +4,7 @@ import React, {FunctionComponent, MutableRefObject, useCallback, useMemo, useRef
 import {createColumnHelper, PaginationState, Row, SortingState, Table} from "@tanstack/react-table"
 import {ActionIcon, Badge, Button, Group, useMantineTheme} from "@mantine/core";
 import {IconDeviceFloppy, IconEdit, IconEye, IconTrash, IconX} from "@tabler/icons-react";
-import {FCBSMantineTanstackTable} from "../index.tsx";
+import {FCBSMantineTanstackTable} from "../index";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";

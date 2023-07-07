@@ -3,8 +3,8 @@ import {ColumnDef, Table,} from '@tanstack/react-table'
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {makeData, Person} from "../../../makeData.ts";
-import {EditableTable} from "../EditableTable.tsx";
+import {makeData, Person} from "../../../makeData";
+import {EditableTable} from "../EditableTable";
 
 const PersonSchema = z.object({
     personId: z.any(),

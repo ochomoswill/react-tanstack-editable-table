@@ -1,8 +1,8 @@
 import {ColumnDef} from "@tanstack/react-table";
 import React from "react";
-import {RHFSelectBox} from "@/lib/devextreme/controls/select-box";
-import {RHFNumberBox} from "@/lib/devextreme/controls/number-box";
-import {RHFTextBox} from "@/lib/devextreme/controls/text-box";
+import {RHFSelectBox} from "../lib/devextreme/controls/select-box";
+import {RHFNumberBox} from "../lib/devextreme/controls/number-box";
+import {RHFTextBox} from "../lib/devextreme/controls/text-box";
 
 export const defaultColumn: Partial<ColumnDef<any>> = {
     cell: ({getValue, row, column, table}) => {

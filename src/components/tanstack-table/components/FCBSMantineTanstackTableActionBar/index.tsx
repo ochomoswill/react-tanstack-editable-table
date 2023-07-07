@@ -25,7 +25,7 @@ import FCBSMantineTanstackTableActionBarQuickFilter
     , {
     FCBSMantineTanstackTableActionBarQuickFilterConfig
 } from "./QuickFilter";
-import {FCBSMantineTanstackTableProps} from "@/component/tanstack-table";
+import {FCBSMantineTanstackTableProps} from "../../index";
 
 export type FCBSMantineTanstackTableActionBarConfig = {
     onAdd?: () => void

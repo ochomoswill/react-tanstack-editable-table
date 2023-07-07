@@ -1,7 +1,7 @@
-import {EditableTable} from "./EditableTable.tsx";
+import {EditableTable} from "./EditableTable";
 import {Meta, StoryObj} from "@storybook/react";
-import {Persons} from "./examples/Persons.tsx";
-import {IndustryTypes} from "./examples/IndustryTypes.tsx";
+import {Persons} from "./examples/Persons";
+import {IndustryTypes} from "./examples/IndustryTypes";
 
 const meta: Meta<typeof EditableTable> = {
     title: 'EditableTable',

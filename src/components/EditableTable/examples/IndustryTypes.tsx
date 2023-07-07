@@ -3,8 +3,8 @@ import {ColumnDef, Table,} from '@tanstack/react-table'
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Person} from "../../../makeData.ts";
-import {EditableTable} from "../EditableTable.tsx";
+import {Person} from "../../../makeData";
+import {EditableTable} from "../EditableTable";
 
 const RowSchema = z.object({
     bank_id: z.any(),

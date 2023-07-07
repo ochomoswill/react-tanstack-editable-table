@@ -2,8 +2,8 @@ import type {Preview} from "@storybook/react";
 import './../src/fonts.css'
 // import './../src/assets/css/dx.generic.smbp-compact-scheme.css'
 import 'devextreme/dist/css/dx.light.compact.css';
-import {FCBSMantineProvider} from "../src/lib/mantine/FCBSMantineProvider";
-import {DevExtremeProvider} from "../src/lib/devextreme";
+import {FCBSMantineProvider} from "../src/components/lib/mantine/FCBSMantineProvider";
+import {DevExtremeProvider} from "../src/components/lib/devextreme";
 
 const preview: Preview = {
     parameters: {

@@ -4,7 +4,7 @@ import React, {FunctionComponent, MutableRefObject, useCallback, useMemo, useRef
 import {createColumnHelper, PaginationState, Row, SortingState, Table} from "@tanstack/react-table"
 import {ActionIcon, Badge, Button, Group, useMantineTheme} from "@mantine/core";
 import {IconBolt, IconEdit, IconEye, IconPower, IconTrash} from "@tabler/icons-react";
-import {FCBSMantineTanstackTable} from "../index.tsx";
+import {FCBSMantineTanstackTable} from "../index";
 
 type Organization = {
     "guid": string

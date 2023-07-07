@@ -25,7 +25,7 @@ import FCBSMantineTanstackTableActionBar
     FCBSMantineTanstackTableActionBarConfig
 } from "./components/FCBSMantineTanstackTableActionBar";
 import {UseFormReturn} from "react-hook-form";
-import {defaultDevExtremeColumn} from "@/component/tanstack-table/FCBSMantineTanstackTableEditing.tsx";
+import {defaultDevExtremeColumn} from "./FCBSMantineTanstackTableEditing";
 
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {

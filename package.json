@@ -1,17 +1,49 @@
 {
-  "name": "react-tanstack-editable-table",
-  "private": true,
+  "name": "@ke-skyworld/themelio-core-test",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "clean": "rm -rf ./dist && rm -rf ke-skyworld-themelio-core-*.*.*.tgz",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "pnpm run clean && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.9.3",
+    "dayjs": "^1.11.9",
+    "react-hook-form": "^7.45.1",
+    "@hookform/resolvers": "^3.1.1",
+    "zod": "^3.21.4",
+    "zustand": "^4.3.8"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.25",
+    "@storybook/addon-interactions": "^7.0.25",
+    "@storybook/addon-links": "^7.0.25",
+    "@storybook/blocks": "^7.0.25",
+    "@storybook/react": "^7.0.25",
+    "@storybook/react-vite": "^7.0.25",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@types/node": "^20.4.0",
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.38.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "eslint-plugin-storybook": "^0.6.12",
+    "prop-types": "^15.8.1",
+    "storybook": "^7.0.25",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^3.1.0",
+    "vite-tsconfig-paths": "^4.2.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.1.1",
@@ -31,27 +63,39 @@
     "zod": "^3.21.4",
     "zustand": "^4.3.8"
   },
-  "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.25",
-    "@storybook/addon-interactions": "^7.0.25",
-    "@storybook/addon-links": "^7.0.25",
-    "@storybook/blocks": "^7.0.25",
-    "@storybook/react": "^7.0.25",
-    "@storybook/react-vite": "^7.0.25",
-    "@storybook/testing-library": "^0.0.14-next.2",
-    "@types/react": "^18.0.37",
-    "@types/react-dom": "^18.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
-    "@vitejs/plugin-react": "^4.0.0",
-    "eslint": "^8.38.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
-    "eslint-plugin-storybook": "^0.6.12",
-    "prop-types": "^15.8.1",
-    "storybook": "^7.0.25",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.9",
-    "vite-tsconfig-paths": "^4.0.5"
+  "peerDependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@tabler/icons-react": "^2.23.0",
+    "devextreme": "22.2",
+    "devextreme-react": "22.2",
+    "@mantine/core": "^6.0.16",
+    "@mantine/dates": "^6.0.16",
+    "@mantine/form": "^6.0.16",
+    "@mantine/hooks": "^6.0.16",
+    "react": "16.8.0 || >=17.x",
+    "react-dom": "16.8.0 || >=17.x",
+    "tabler-icons-react": "^1.56.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/themelio-core.es.js",
+      "require": "./dist/themelio-core.umd.js"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "main": "./dist/themelio-core.umd.js",
+  "module": "./dist/themelio-core.es.js",
+  "types": "./dist/components/index.d.ts",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ochomoswill/themelio-core.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
