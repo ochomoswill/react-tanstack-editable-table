@@ -1,6 +1,6 @@
 {
   "name": "@ke-skyworld/themelio-core-test",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "clean": "rm -rf ./dist && rm -rf ke-skyworld-themelio-core-*.*.*.tgz",
