@@ -1,5 +1,5 @@
 {
-  "name": "@ke-skyworld/themelio-core-test",
+  "name": "@ochomoswill/themelio-core-test",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -93,7 +93,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ochomoswill/themelio-core.git"
+    "url": "git://github.com/ochomoswill/react-tanstack-editable-table.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
